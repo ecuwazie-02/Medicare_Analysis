@@ -16,8 +16,8 @@ The analysis leverages a highly structured multi-dimensional dataset spanning a 
 Target Variable: `TOT_MDCR_STDZD_PYMT_PC` (Total Standardized Medicare Payments Per Capita). This metric standardizes payments by removing geographic differences in payment rates (such as local wage indexes and graduate medical education adjustments), allowing for an accurate baseline comparison of spending across regions.
 
 Feature Classifications:
-- Patient Demographics (Feature Group 1): Captures regional patient attributes, including average age (BENE_AVG_AGE), gender ratios (BENE_FEML_PCT), and Medicaid dual-eligibility status (BENE_DUAL_PCT).
-- System Utilization & Costs (Feature Group 2): Explores granular per capita payment indicators across specific medical sectors (e.g., Inpatient IP_MDCR_STDZD_PYMT_PC, Outpatient OP_MDCR_STDZD_PYMT_PC, Home Health    HH_MDCR_STDZD_PYMT_PC, and Hospice HOSPC_MDCR_STDZD_PYMT_PC).
+- Patient Demographics (Feature Group 1): Captures regional patient attributes, including average age (`BENE_AVG_AGE`), gender ratios (`BENE_FEML_PCT`), and Medicaid dual-eligibility status (`BENE_DUAL_PCT`).
+- System Utilization & Costs (Feature Group 2): Explores granular per capita payment indicators across specific medical sectors (e.g., Inpatient `IP_MDCR_STDZD_PYMT_PC`, `Outpatient OP_MDCR_STDZD_PYMT_PC`, Home Health    `HH_MDCR_STDZD_PYMT_PC`, and Hospice `HOSPC_MDCR_STDZD_PYMT_PC`).
 - Operational Baseline (Group 3): Maintained strictly as an un-engineered, aggregate baseline block to benchmark the comparative performance of our primary feature groups.
 
 Modeling & Analytical Strategy: Each feature partition is evaluated across three separate algorithmic configurations to isolate structural spending trends:
@@ -38,19 +38,22 @@ A key technical hurdle addressed during the modeling phase was managing severe m
 
 1. Model Performance and Non-Linear Supremacy Comparative evaluation across the true feature blocks demonstrated that a purely linear assumption underrepresents the true structural cost dynamics. Capturing non-linear interactions and polynomial expansions resulted in a distinct performance curve: Feature Group 1 (Demographics Only): Achieved a very low polynomial baseline ($R^2 \approx 7.97\%$), proving that demographics alone cannot reliably explain or forecast total regional healthcare expenditures. Feature Group 2 (System Utilization & Costs): Reached a peak predictive accuracy of $R^2 \approx 79.39\%$ when expanded to capture non-linear interactions. This highlights that sector expenses compound non-linearly across geographies.
 
-2. The Multicollinearity Trade-off: Prediction vs. Explanation. A deep dive into the sector spending metrics within Feature Group 2 revealed high levels of multicollinearity. In standard Ordinary Least Squares (OLS) linear regression models, these overlapping dependencies create highly erratic, volatile feature weights, which can distort the algorithm when trying to isolate independent variables. However, because the primary goal of this specific modeling track was strictly to maximize predictive accuracy rather than to isolate clean, uncorrelated individual feature weights, this multicollinearity does not compromise the model's aggregate forecasting power. By leaning into a polynomial space, the framework maps these correlated clusters to capture combined real-world spending surges.
+2. The Multicollinearity Trade-off: Prediction vs. Explanation. A deep dive into the sector spending metrics within Feature Group 2 revealed high levels of multicollinearity. In standard linear regression models, these overlapping dependencies create highly erratic, volatile feature weights, which can distort the algorithm when trying to isolate independent variables. However, because the primary goal of this specific modeling track was strictly to maximize predictive accuracy rather than to isolate clean, uncorrelated individual feature weights, this multicollinearity does not compromise the model's aggregate forecasting power. By leaning into a polynomial space, the framework maps these correlated clusters to capture combined real-world spending surges.
 
-3. Degrees of Freedom and Complexity Trade-offsTransitioning to a polynomial model increases the feature space's complexity and alters the structural degrees of freedom. While the expansion captures critical interaction terms—such as how a concurrent rise in both Home Health and Inpatient service utilization compounds overall per capita spending—it demands strict validation to ensure that the higher degrees of freedom do not introduce localized overfitting.
+3. Degrees of Freedom and Complexity Trade-offs: Transitioning to a polynomial model increases the feature space's complexity and alters the structural degrees of freedom. While the expansion captures critical interaction terms—such as how a concurrent rise in both Home Health and Inpatient service utilization compounds overall per capita spending—it demands strict validation to ensure that the higher degrees of freedom do not introduce localized overfitting.
 
 ## Structural Assumptions and Limitations
 
-While the linear approach achieved high predictive metrics, the analysis uncovered core structural limitations inherent to OLS:
+While the polynomial approach achieved high predictive metrics, the analysis uncovered core structural limitations:
 
-- Assumption of Linearity: The OLS model assumes a stable, constant, and linear relationship across variables. Consequently, it remains blind to potential non-linear variables or threshold effects (e.g., regions where a sudden spike in a specific chronic disease triggers an exponential, rather than linear, jump in spending).
-  
-- Interpretability Constraints: Due to the aforementioned multicollinearity within utilization metrics, using this specific model to inform direct policy interventions on a single service type could lead to misleading conclusions, despite the model's overall accuracy.
+1. Part-to-Whole Inflation: Feature Group 2 consists of component healthcare sector costs (Inpatient, Outpatient, etc.) used to predict the total overall spending. This structural relationship heavily guides the model toward high performance, which may obscure real-world variations.
+   
+2. Explanatory Collapse: As previously mentioned, the independent variables within the cost groups exhibit severe multicollinearity. While expanding the feature space into a polynomial structure successfully captures complex interaction terms to maximize predictive accuracy, it disrupts the stability of individual feature weights. This limits the model's utility as an explanatory tool for targeted policy interventions.
+   
+3. Complexity & Omitted Factors: Moving to a polynomial feature matrix significantly increases model complexity and degrees of freedom. Furthermore, the model remains blind to vital external cost drivers such as regional chronic disease tracking, local hospital bed capacities, and community Social Determinants of Health (SDoH). Future iterations should focus on incorporating these external clinical indicators.
 
 ## Recommendations
+
 Based on the modeling outcomes, the following steps are recommended for portfolio and operational extensions:
 
 - Leverage the High-Accuracy Baseline for Regional Budgeting: Deploy the Feature Group 2 Polynomial Regression model as the primary forecasting tool for regional Medicare cost projections. Because it captures interaction metrics, it serves as a highly reliable tool for predicting baseline spending trajectories.
