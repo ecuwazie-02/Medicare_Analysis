@@ -17,14 +17,14 @@ Target Variable: `TOT_MDCR_STDZD_PYMT_PC` (Total Standardized Medicare Payments 
 
 Feature Classifications:
 - Patient Demographics (Feature Group 1): Captures regional patient attributes, including average age (`BENE_AVG_AGE`), gender ratios (`BENE_FEML_PCT`), and Medicaid dual-eligibility status (`BENE_DUAL_PCT`).
-- System Utilization & Costs (Feature Group 2): Explores granular per capita payment indicators across specific medical sectors (e.g., Inpatient `IP_MDCR_STDZD_PYMT_PC`, `Outpatient OP_MDCR_STDZD_PYMT_PC`, Home Health    `HH_MDCR_STDZD_PYMT_PC`, and Hospice `HOSPC_MDCR_STDZD_PYMT_PC`).
+- System Utilization (Feature Group 2): Explores granular per capita payment indicators across specific medical sectors (e.g., Inpatient `IP_MDCR_STDZD_PYMT_PC`, `Outpatient OP_MDCR_STDZD_PYMT_PC`, Home Health    `HH_MDCR_STDZD_PYMT_PC`, and Hospice `HOSPC_MDCR_STDZD_PYMT_PC`).
 - Operational Baseline (Group 3): Maintained strictly as an un-engineered, aggregate baseline block to benchmark the comparative performance of our primary feature groups.
 
-Modeling & Analytical Strategy: Each feature partition is evaluated across three separate algorithmic configurations to isolate structural spending trends:
+Modeling Strategy (Comparative Evaluation): Feature groups were tested head-to-head across three distinct mathematical frameworks to determine which approach best models regional spending:
 
-- Linear Regression: Establishes the constant baseline relationship.
-- Polynomial Regression: Expands the input dimensions to capture non-linear variable cross-overs and geometric interaction terms.
-- Ridge Regression: Utilizes an L2 regularization penalty to combat clinical feature dependencies and stabilize weights.
+- Linear Regression (Baseline Benchmark): Tests if a rigid, straight-line relationship can sufficiently capture regional cost distributions.
+- Polynomial Regression (Non-Linear Challenger): Captures multi-sector interaction and geometric curves to see if non-linear flexibility yields a superior fit.
+- Ridge Regression (Regularized Challenger): Introduces an $L2$ penalty to evaluate how stabilizing model weights handles severe feature dependencies compared to standard Linear Regression.
 
 ## Executive Summary
 
