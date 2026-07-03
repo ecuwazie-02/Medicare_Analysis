@@ -30,7 +30,7 @@ Modeling Strategy (Comparative Evaluation): Feature groups were tested head-to-h
 
 This project establishes an optimized predictive framework to forecast regional Medicare spending behavior. By evaluating multiple feature configurations across linear, regularized, and non-linear regression variations, the analysis successfully demonstrates that capturing interaction effects yields superior results.
 
-The Polynomial Regression model utilizing Feature Group 2 emerged as the optimal analytical framework, achieving an exceptional $R^2$ score of 79.39%. This significantly outpaced demographic constraints and baseline linear configurations, proving that systemic sector utilization costs map the vast majority of geographic payment variance when non-linear expansions are captured.
+The Polynomial Regression model utilizing Feature Group 2 emerged as the optimal analytical framework, achieving an exceptional $R^2$ score of 79.43%. This significantly outpaced demographic constraints and baseline linear configurations, proving that systemic sector utilization costs map the vast majority of geographic payment variance when non-linear expansions are captured.
 
 A key technical hurdle addressed during the modeling phase was managing severe multicollinearity within the structural sector spending features. While these overlapping dependencies introduce instability into standard linear feature weights (making causal, independent explanation difficult), modeling the collaborative interaction terms via a polynomial expansion successfully utilizes these joint relationships to optimize aggregate predictive performance.
 
